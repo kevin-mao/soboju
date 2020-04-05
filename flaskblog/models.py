@@ -9,45 +9,55 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 friendship = db.Table(
-    'friendships', Base.metadata,
-    db. Column('friend_a_id', db.Integer, db.ForeignKey('User.id'),
+    'friendships', db.metadata,
+    db. Column('friend_a_id', db.Integer, db.ForeignKey('user.id'),
                                         primary_key=True),
-    db.Column('friend_b_id', db.Integer, db.ForeignKey('User.id'),
+    db.Column('friend_b_id', db.Integer, db.ForeignKey('user.id'),
                                             primary_key=True)
 )
 
-class User(Base, db.Model, UserMixin):
-    __tablename__ = 'User'
+community = db.Table(
+    'membership', db.metadata,
+    db. Column('community', db.Integer, db.ForeignKey('community.id'),
+                                        primary_key=True),
+    db.Column('member', db.Integer, db.ForeignKey('user.id'),
+                                            primary_key=True)
+)
+
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
+    pages = db.relationship("Page", backref="user")
     friends = db.relationship("User", secondary=friendship, 
                            primaryjoin=id==friendship.c.friend_a_id,
                            secondaryjoin=id==friendship.c.friend_b_id,
     )
-    pages = db.relationship("Page", backref="User")
+    community = db.relationship("Community", secondary=community, backref="members")
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.image_file}')"
 
-class Page(Base, db.Model):
-    __tablename__ = 'Page'
+class Community(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('User.id'), nullable=False)
-    title = db.Column(db.String(100), nullable=False)
-    entries = db.relationship("Entry", backref="Page")
-    goals = db.relationship("Goal", backref="Page")
+    pages = db.relationship("Page", backref="community")
 
-class Entry(Base, db.Model):
-    __tablename__ = 'Entry'
+class Page(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id')) # can be nullable
+    community_id = db.Column(db.Integer, db.ForeignKey('community.id')) # can be nullable
+    title = db.Column(db.String(100), nullable=False)
+    entries = db.relationship("Entry", backref="page")
+    goals = db.relationship("Goal", backref="page")
+
+class Entry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(500), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('Page.id'), nullable=False)
+    page_id = db.Column(db.Integer, db.ForeignKey('page.id'), nullable=False)
 
-class Goal(Base, db.Model):
-    __tablename__ = 'Goal'
+class Goal(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    list = db.Column(db.String(500), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('Page.id'), nullable=False)
+    goals = db.Column(db.String(500), nullable=False)
+    page_id = db.Column(db.Integer, db.ForeignKey('page.id'), nullable=False)
