@@ -2,7 +2,7 @@
 ## Sobujo (The first social bullet journel)
 
 ### Installation
-` git clone https://github.com/kevin-mao/sobujo.git`
+`$ git clone https://github.com/kevin-mao/sobujo.git`
 
 ### Environment setup and activation
 ```
@@ -14,4 +14,15 @@ $ pip install -r requirements.txt
 ### Running the app
 ```
 $ python run.py
+```
+
+### Testing databse
+Run inside python shell
+```
+from flaskblog import db
+# will reset local db
+db.create_all()
+
+from flaskblog.models import User
+User.query.all()
 ```
