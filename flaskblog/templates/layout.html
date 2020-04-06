@@ -69,7 +69,7 @@
             <div class="sidebar-section">
               Your Friends
               {% for friend in current_user.friends %}
-                <img class="rounded-circle account-img" src="/static/profile_pics/{{ current_user.image_file }}">
+                <img class="rounded-circle account-img" src="/static/profile_pics/{{ friend.image_file }}">
                 <a href="{{ url_for('spectate', user_id=friend.id) }}"> {{ friend.username }} </a>
                 {% endfor %}
             </div>
