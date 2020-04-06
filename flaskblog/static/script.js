@@ -18,7 +18,8 @@ $(document).ready(() => {
       });
 });
 
-function addPage(title){
+function addPage(){
+    title = $(`#page`).val();
     $.post('/page', {title}, (response) => {
         console.log(response);
         response = JSON.parse(response);
@@ -26,7 +27,9 @@ function addPage(title){
     });
 }
 
-function addEntry(page_id, text){
+function addEntry(page_id){
+    text = $(`#${page_id}-entry`).val();
+    console.log(text);
     $.post('/entry', {page_id, text}, (response) => {
         console.log(response);
         response = JSON.parse(response);
@@ -34,7 +37,9 @@ function addEntry(page_id, text){
     });
 }
 
-function addGoal(page_id, text){
+function addGoal(page_id){
+    text = $(`#${page_id}-goal`).val();
+    console.log(text);
     $.post('/goal', {page_id, text}, (response) => {
         console.log(response);
         response = JSON.parse(response);
