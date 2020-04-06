@@ -6,7 +6,7 @@ from flaskblog import app, db, bcrypt
 from flaskblog.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm
 from flaskblog.models import User, Community, Page, Entry, Goal
 from flask_login import login_user, current_user, logout_user, login_required
-
+from collections import defaultdict
 
 
 @app.route("/home")
@@ -15,9 +15,13 @@ def home():
     # main feed: get recent entries and goals 
     # change home.html to use entires and goals
     # return render_template('home.html', entries=entries, goals=goals)
-    
-    # sungbin is working on this right now
-    return render_template('index.html')
+    entries = defaultdict(list)
+    goals = defaultdict(list)
+    for friend in current_user.friends:
+        for page in friend.pages:
+            entries[friend].extend(Entry.query.order_by(Entry.page_id))
+            goals[friend].extend(Goal.query.order_by(Goal.page_id))
+    return render_template('home.html', entries=entries, goals=goals)
 
 
 @app.route("/journal")
