@@ -39,21 +39,32 @@ class Community(db.Model):
     name = db.Column(db.String(20), nullable=False)
     pages = db.relationship("Page", backref="community")
 
+    def __repr__(self):
+        return f"Community('{self.name}')"
+
 class Page(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id')) # can be nullable
     community_id = db.Column(db.Integer, db.ForeignKey('community.id')) # can be nullable
     title = db.Column(db.String(100), nullable=False)
-
     entries = db.relationship("Entry", backref="page")
     goals = db.relationship("Goal", backref="page")
+
+    def __repr__(self):
+        return f"Page('{self.title}')"
 
 class Entry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     page_id = db.Column(db.Integer, db.ForeignKey('page.id'), nullable=False)
     text = db.Column(db.String(500), nullable=False)
+    
+    def __repr__(self):
+        return f"Entry('{self.text}')"
 
 class Goal(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     page_id = db.Column(db.Integer, db.ForeignKey('page.id'), nullable=False)
     goals = db.Column(db.String(500), nullable=False)
+
+    def __repr__(self):
+        return f"Goal('{self.goals}')"

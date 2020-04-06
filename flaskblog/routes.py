@@ -4,24 +4,34 @@ from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, abort
 from flaskblog import app, db, bcrypt
 from flaskblog.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm
-from flaskblog.models import User
+from flaskblog.models import User, Community, Page, Entry, Goal
 from flask_login import login_user, current_user, logout_user, login_required
 
 
-@app.route("/")
+
 @app.route("/home")
+@login_required
 def home():
     # main feed: get recent entries and goals 
     # change home.html to use entires and goals
-    return render_template('home.html', entries=entries, goals=goals)
+    # return render_template('home.html', entries=entries, goals=goals)
+    
+    # sungbin is working on this right now
+    return render_template('index.html')
 
 
-@app.route("/user/<string:username>")
-def jorunal(username):
-    user = User.query.filter_by(username=username).first_or_404()
-    # get pages, entries and goals
-    # add a journal.html to use pages, entries and goals
-    return render_template('journal.html', pages=pages, entries=entires, goals=goals, user=user)
+@app.route("/journal")
+@login_required
+def journal():
+    pages = Page.query.filter_by(user_id=current_user.id).all()
+    
+    entries = {}
+    goals = {}
+    for page in pages:
+        entries[page.id] = Entry.query.filter_by(page_id=page.id).all()
+        goals[page.id] = Goal.query.filter_by(page_id=page.id).all()
+
+    return render_template('profile.html', pages=pages, entries=entries, goals=goals, user=current_user)
 
 @app.route("/about")
 def about():
@@ -41,7 +51,7 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
-
+@app.route("/")
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:

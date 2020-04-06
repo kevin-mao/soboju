@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1 class="mb-3">{{ user.username }} journal</h1>
+    <!-- table of contents -->
+    <ul>
+        {% for page in pages %}
+        <li> {{ page.title }} </li>
+        {% endfor %}
+    </ul>
+    <!-- pages of entries and goals -->
+    {% for page in pages %}
+        <article class="media content-section">
+          <div class="media-body">
+            <h2>{{ page.title }} </h2>
+            <h3> Entries </3>
+            <ul>
+                {% for entry in entries.get(page.id) %}
+                <li> {{ entry.text }} </li>
+                {% endfor %}
+            </ul>
+            <h3>Goals</h3>
+            <ul>
+                {% for goal in goals.get(page.id) %}
+                <li> {{ goal.goals }} </li>
+                {% endfor %}
+            </ul>
+          </div>
+        </article>
+    {% endfor %}
+{% endblock content %}
