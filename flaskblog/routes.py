@@ -10,8 +10,8 @@ from flask_login import login_user, current_user, logout_user, login_required
 
 @app.route("/")
 @app.route("/home")
-def feed():
-    # get recent entries and goals 
+def home():
+    # main feed: get recent entries and goals 
     # change home.html to use entires and goals
     return render_template('home.html', entries=entries, goals=goals)
 
@@ -23,6 +23,9 @@ def jorunal(username):
     # add a journal.html to use pages, entries and goals
     return render_template('journal.html', pages=pages, entries=entires, goals=goals, user=user)
 
+@app.route("/about")
+def about():
+    return render_template('about.html', title='About')
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
