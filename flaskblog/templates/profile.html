@@ -44,7 +44,13 @@
                     <!-- <div class="header-style"> Ideas </div> -->
                     <!-- <ul> -->
                     {% for entry in entries.get(page.id) %}
-                    <div class="entry-style"> {{ entry.text }} </div>
+                    <div class="row" id="{{entry.id}}-entry-row">
+                    <div class="entry-style col-md-8"> {{ entry.text }} </div>
+                    <div class="col-md-4">
+                        <button type="button" class="btn btn-light btn-style" id="{{entry.id}}-entry-btn" onclick="editEntry({{entry.id}}, '{{entry.text}}')">Edit</button> 
+   
+                    </div>
+                    </div>
                     {% endfor %}
                     <form>
                         <input type="text" id="{{page.id}}-entry">
