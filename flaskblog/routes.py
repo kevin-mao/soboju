@@ -39,12 +39,29 @@ def journal():
 
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
 
-    return render_template('profile.html', pages=pages, entries=entries, goals=goals,
-                                                image_file=image_file)
+    return render_template('profile.html', pages=pages, entries=entries, goals=goals, image_file=image_file)
+
+
+@app.route("/journal/<int:user_id>")
+@login_required
+def spectate(user_id):
+    if user_id == current_user.id:
+        return redirect(url_for('home'))
+    other_user = User.query.filter_by(id=user_id).first()
+    pages = Page.query.filter_by(user_id=user_id).all()
+    entries = {}
+    goals = {}
+    for page in pages:
+        entries[page.id] = Entry.query.filter_by(page_id=page.id).all()
+        goals[page.id] = Goal.query.filter_by(page_id=page.id).all()
+    image_file = url_for('static', filename='profile_pics/' + other_user.image_file)
+    return render_template('other_profile.html', pages=pages, entries=entries, goals=goals, image_file=image_file, other_user=other_user )
+
 
 @app.route("/about")
 def about():
     return render_template('about.html', title='About')
+
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -60,7 +77,8 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
-@app.route("/")
+
+@app.route("/", methods=['GET', 'POST'])
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:

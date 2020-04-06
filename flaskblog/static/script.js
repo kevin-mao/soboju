@@ -27,7 +27,7 @@ function addPage(){
     });
 }
 
-function addEntry(page_id){
+function addEntry(page_id) {
     text = $(`#${page_id}-entry`).val();
     console.log(text);
     $.post('/entry', {page_id, text}, (response) => {

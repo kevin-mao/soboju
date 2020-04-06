@@ -3,9 +3,8 @@
 <div class="container-feed">
     {% for author in entries %}
         <img class="rounded-circle feed-img" src="{{ url_for('static', filename='profile_pics/' + author.image_file) }}">
-          <span class="feed-style"> {{ author.username }} </span>
+        <span class="feed-style"> <a href="{{ url_for('spectate', user_id=author.id) }}"> {{ author.username }} </a> </span>
         <div class="entry-style">
-
           <!-- <div class="media-body"> -->
             <!-- <h2> New Entries </h2> -->
             {% for entry in entries[author] %}
@@ -19,12 +18,10 @@
                     <div class="dot"></div>
                 </div>
                 <div class="col-md-11">
-                    <div> {{ goal.goals }} </div>
+                    <div> {{ goal.text }} </div>
                 </div>
             </div>
             {%  endfor %}
-
-
           <!-- </div> -->
         </div>
     {% endfor %}
