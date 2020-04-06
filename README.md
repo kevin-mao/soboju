@@ -1,5 +1,8 @@
 # 2020 Virtual Campus Design Challenge
-## Sobujo (The first social bullet journel)
+## Sobujo (The first social bullet journel) Demo
+<figure class="video_container">
+  <iframe src="https://drive.google.com/open?id=12ropIwjFC_W3SA-OOXWuTIzuVoDdeSgf" frameborder="0" allowfullscreen="true"> </iframe>
+</figure>
 
 ### Installation
 `$ git clone https://github.com/kevin-mao/sobujo.git`
@@ -26,3 +29,4 @@ db.create_all()
 from flaskblog.models import User
 User.query.all()
 ```
+
