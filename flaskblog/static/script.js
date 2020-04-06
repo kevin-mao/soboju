@@ -16,6 +16,8 @@ $(document).ready(() => {
           });
         };
       });
+
+   
 });
 
 function addPage(){
@@ -35,6 +37,21 @@ function addEntry(page_id){
         response = JSON.parse(response);
         entry_id = response.entry_id;
     });
+}
+
+function editEntry(entry_id, entry_text) {
+    console.log(entry_id)
+     $(`#${entry_id}-entry-btn`).click(function(){
+        console.log('yes')
+        // {{entry.id}}-entry-row
+        $(`#${entry_id}-entry-row`).empty()
+
+        var input_box = $('<input type="text" id="input_entry">')
+        $(`#${entry_id}-entry-row`).html(input_box)
+        $("#input_entry").val(entry_text)
+
+    })
+
 }
 
 function addGoal(page_id){
