@@ -12,15 +12,17 @@
           <!-- <p class="text-secondary">{{ current_user.email }}</p> -->
         <!-- </div> -->
       <!-- </div> -->
+              
+        <!-- table of contents -->
       <div class="pink-divider"></div>
-      <div class="sidebar-journal">Goals</div>
+      {% for page in pages %}
+      <div class="sidebar-journal">{{page.title}}</div>
       <div class="pink-divider"></div>
-      <div class="sidebar-journal">Year at a Glance</div>
-      <div class="pink-divider"></div>
-      <div class="sidebar-journal">April</div>
-      <div class="pink-divider"></div>
-      <div class="sidebar-journal">May</div>
-      <div class="pink-divider"></div>
+      {% endfor %}
+      <form>
+        <input type="text" id="page">
+        <input type="submit" value="Add an page" onclick="addPage()">
+    </form>
      
     </div>
     </div>
@@ -28,12 +30,7 @@
         <!-- <h1 class="mb-3">{{ current_user.username }} journal</h1> -->
         <div class="date-style">Monday, April 3 2020</div>
         <br>
-        <!-- table of contents -->
-        <!-- <ul>
-            {% for page in pages %}
-            <li> {{ page.title }} </li>
-            {% endfor %}
-        </ul> -->
+
         <!-- pages of entries and goals -->
         {% for page in pages %}
         <div class="row">
@@ -49,6 +46,10 @@
                     {% for entry in entries.get(page.id) %}
                     <div class="entry-style"> {{ entry.text }} </div>
                     {% endfor %}
+                    <form>
+                        <input type="text" id="{{page.id}}-entry">
+                        <input type="submit" value="Add an entry" onclick="addEntry({{page.id}})">
+                    </form>
                     <!-- </ul> -->
                   <!-- </div> -->
                 </div>
@@ -70,6 +71,10 @@
                         </div>
                     </div>
                     {% endfor %}
+                    <form>
+                        <input type="text" id="{{page.id}}-goal">
+                        <input type="submit" value="Add a goal" onclick="addGoal({{page.id}})">
+                    </form>
                     </div>
                     
                 <!-- </article> -->
