@@ -214,6 +214,50 @@ def new_goal():
 
         return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
 
+@app.route("/comment", methods=['POST', 'PUT'])
+@login_required
+def new_comment():
+    if request.method == 'POST':
+        args = request.form
+        if not args:
+            abort(400)
+        if not current_user.is_authenticated:
+            abort(403)
+
+        entry_id = args.get('entry_id')
+        goal_id = args.get('goal_id')
+        text = args.get('text')
+        user_id = args.get('user_id')
+
+        if entry_id:
+            comment = Comment(text=text, user_id=user_id, username = current_user.username,
+                                    entry_id=entry_id)
+        elif goal_id:
+            comment = Comment(text=text, user_id=user_id, username = current_user.username,
+                                    goal_id=goal_id)
+            
+        db.session.add(comment)
+        db.session.commit()
+
+        return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
+    
+    elif request.method == 'PUT':
+        # currently anyone can update a comment
+        args = request.form
+        if not args:
+            abort(400)
+        if not current_user.is_authenticated:
+            abort(403)
+
+        comment_id = args['comment_id']
+        new_text = args['text']
+
+        comment = Comment.query.filter_by(id=comment_id).first()
+        comment.text = new_text
+        db.session.commit()
+
+        return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
+
 @app.route("/friend", methods=['POST'])
 @login_required
 def new_friend():

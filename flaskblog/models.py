@@ -29,7 +29,7 @@ class User(db.Model, UserMixin):
                            primaryjoin=id==friendship.c.friend_a_id,
                            secondaryjoin=id==friendship.c.friend_b_id)
     community = db.relationship("Community", secondary=membership, backref="members")
-    comments = db.relationship("Comment", backref="author")
+    comments = db.relationship("Comment", backref="author") # received
 
 
     def __repr__(self):
@@ -75,8 +75,12 @@ class Goal(db.Model):
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(500), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False) # the author of this comment
-    entry_id = db.Column(db.Integer, db.ForeignKey('entry.id')) # the author of this comment
-    goal_id = db.Column(db.Integer, db.ForeignKey('goal.id')) # the author of this comment
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False) # the receiver of this comment
+    entry_id = db.Column(db.Integer, db.ForeignKey('entry.id'))
+    goal_id = db.Column(db.Integer, db.ForeignKey('goal.id')) 
+    username = db.Column(db.String(20), nullable=False)
+
+    def __repr__(sefl):
+        return f"Comment('{self.text}, {self.author}')"
 
 
