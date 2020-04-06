@@ -12,25 +12,29 @@ import json
 @app.route("/home", methods=['GET', 'POST'])
 @login_required
 def home():
-    # main feed: get recent entries and goals 
-    # change home.html to use entires and goals
-    # return render_template('home.html', entries=entries, goals=goals)
-    
-    # pages = Page.query.filter_by(user_id=current_user.id).all()
+    # get users for potentential new firnds
+    users = User.query.all()
+    # remove current user
+    users = [user for user in users if user.id != current_user.id and user not in current_user.friends]
+
     entries = defaultdict(list)
     goals = defaultdict(list)
     for friend in current_user.friends:
         for page in friend.pages:
             entries[friend].extend(Entry.query.filter_by(page_id=page.id).all())
             goals[friend].extend(Goal.query.filter_by(page_id=page.id).all())
-    return render_template('home.html', entries=entries, goals=goals)
+    return render_template('home.html', entries=entries, goals=goals, users=users)
 
 
 @app.route("/journal")
 @login_required
 def journal():
     pages = Page.query.filter_by(user_id=current_user.id).all()
-    
+    # get users for potentential new firnds
+    users = User.query.all()
+    # remove current user
+    users = [user for user in users if user.id != current_user.id and user not in current_user.friends]
+
     entries = {}
     goals = {}
     for page in pages:
@@ -39,12 +43,18 @@ def journal():
 
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
 
-    return render_template('profile.html', pages=pages, entries=entries, goals=goals, image_file=image_file)
+    return render_template('profile.html', pages=pages, entries=entries, goals=goals, 
+                        image_file=image_file, users=users)
 
 
 @app.route("/journal/<int:user_id>")
 @login_required
 def spectate(user_id):
+    # get users for potentential new firnds
+    users = User.query.all()
+    # remove current user
+    users = [user for user in users if user.id != current_user.id and user not in current_user.friends]
+
     if user_id == current_user.id:
         return redirect(url_for('home'))
     other_user = User.query.filter_by(id=user_id).first()
@@ -55,7 +65,8 @@ def spectate(user_id):
         entries[page.id] = Entry.query.filter_by(page_id=page.id).all()
         goals[page.id] = Goal.query.filter_by(page_id=page.id).all()
     image_file = url_for('static', filename='profile_pics/' + other_user.image_file)
-    return render_template('other_profile.html', pages=pages, entries=entries, goals=goals, image_file=image_file, other_user=other_user )
+    return render_template('other_profile.html', pages=pages, entries=entries, goals=goals, 
+                    image_file=image_file, other_user=other_user, users=users)
 
 
 @app.route("/about")
@@ -87,6 +98,7 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
+            print(form.remember.data)
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
             return redirect(next_page) if next_page else redirect(url_for('home'))

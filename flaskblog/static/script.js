@@ -20,6 +20,16 @@ $(document).ready(() => {
    
 });
 
+function showPage(page_id){
+    pages = $(".page");
+    for (i = 0; i < pages.length; i++){
+        if (pages[i].id != page_id) {
+            pages[i].style.display = 'none';
+        } else {
+            pages[i].style.display = '';
+        }
+    }
+}
 function addPage(){
     title = $(`#page`).val();
     $.post('/page', {title}, (response) => {
@@ -65,7 +75,9 @@ function addGoal(page_id){
 }
 
 function addFriend(user_id){
-    $.post('/friend', {user_id});
+    $.post('/friend', {user_id}, () => {
+        window.location.reload();
+    });
 }
 
 function addComment(text, user_id, entry_id, goal_id){

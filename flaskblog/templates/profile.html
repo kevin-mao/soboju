@@ -16,12 +16,13 @@
             <!-- table of contents -->
             <div class="pink-divider"></div>
             {% for page in pages %}
-            <div class="sidebar-journal">{{page.title}}</div>
+            <div class="sidebar-journal">
+                <a href="#" style="color:black;" onclick="showPage({{page.id}})">{{page.title}}</a></div>
             <div class="pink-divider"></div>
             {% endfor %}
             <form>
                 <input type="text" id="page">
-                <input type="submit" value="Add an page" onclick="addPage()">
+                <input type="submit" value="Add a page" onclick="addPage()">
             </form>
 
         </div>
@@ -33,60 +34,61 @@
 
         <!-- pages of entries and goals -->
         {% for page in pages %}
-        <div class="row">
-            <div class="header-style">{{ page.title }} </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="entry-section">
-                    <!-- <div class="media-body"> -->
+        <div id={{page.id}} class="page">
+            <div class="row">
+                <div class="header-style">{{ page.title }} </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="entry-section">
+                        <!-- <div class="media-body"> -->
 
-                    <!-- <div class="header-style"> Ideas </div> -->
-                    <!-- <ul> -->
-                    {% for entry in entries.get(page.id) %}
-                    <div class="row" id="{{entry.id}}-entry-row">
-                    <div class="entry-style col-md-8"> {{ entry.text }} </div>
-                    <div class="col-md-4">
-                        <button type="button" class="btn btn-light btn-style" id="{{entry.id}}-entry-btn" onclick="editEntry({{entry.id}}, '{{entry.text}}')">Edit</button> 
-   
+                        <!-- <div class="header-style"> Ideas </div> -->
+                        <!-- <ul> -->
+                        {% for entry in entries.get(page.id) %}
+                        <div class="row" id="{{entry.id}}-entry-row">
+                            <div class="entry-style col-md-12"> {{ entry.text }} </div>
+                        </div>
+                        <!-- <div class="col-md-4">
+                            <button type="button" class="btn btn-light btn-style" id="{{entry.id}}-entry-btn" onclick="editEntry({{entry.id}}, '{{entry.text}}')">Edit</button> 
+                        </div> -->
+                        {% endfor %}
+                        <form>
+                            <input type="text" id="{{page.id}}-entry">
+                            <input type="submit" value="Add an entry" onclick="addEntry({{page.id}})">
+                        </form>
+                        <!-- </ul> -->
+                        <!-- </div> -->
                     </div>
+                </div>
+                <!-- <span class="dot"></span> -->
+
+                <div class="col-md-6">
+                    <!-- <article class="media content-section"> -->
+                    <div class="entry-style">
+                        <div class="goal-style"> Goals </div>
+
+                        {% for goal in goals.get(page.id) %}
+                        <div class="row individual-goal">
+                            <div class="col-md-2">
+                                <div class="dot"></div>
+                            </div>
+                            <div class="col-md-10">
+                                <div> {{ goal.text }} </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        <form>
+                            <input type="text" id="{{page.id}}-goal">
+                            <input type="submit" value="Add a goal" onclick="addGoal({{page.id}})">
+                        </form>
                     </div>
-                    {% endfor %}
-                    <form>
-                        <input type="text" id="{{page.id}}-entry">
-                        <input type="submit" value="Add an entry" onclick="addEntry({{page.id}})">
-                    </form>
-                    <!-- </ul> -->
-                    <!-- </div> -->
+
+                    <!-- </article> -->
                 </div>
             </div>
-            <!-- <span class="dot"></span> -->
-
-            <div class="col-md-6">
-                <!-- <article class="media content-section"> -->
-                <div class="entry-style">
-                    <div class="goal-style"> Goals </div>
-
-                    {% for goal in goals.get(page.id) %}
-                    <div class="row individual-goal">
-                        <div class="col-md-2">
-                            <div class="dot"></div>
-                        </div>
-                        <div class="col-md-10">
-                            <div> {{ goal.text }} </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                    <form>
-                        <input type="text" id="{{page.id}}-goal">
-                        <input type="submit" value="Add a goal" onclick="addGoal({{page.id}})">
-                    </form>
-                </div>
-
-                <!-- </article> -->
-            </div>
         </div>
-    {% endfor %}
+        {% endfor %}
     </div>
 </div>
 {% endblock content %}
