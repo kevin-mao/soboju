@@ -9,7 +9,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 from collections import defaultdict
 
 
-@app.route("/home")
+@app.route("/home", methods=['GET', 'POST'])
 @login_required
 def home():
     # main feed: get recent entries and goals 
@@ -17,10 +17,15 @@ def home():
     # return render_template('home.html', entries=entries, goals=goals)
     entries = defaultdict(list)
     goals = defaultdict(list)
+    print("friends", current_user.friends)
     for friend in current_user.friends:
+        print("friend", friend)
         for page in friend.pages:
-            entries[friend].extend(Entry.query.order_by(Entry.page_id))
-            goals[friend].extend(Goal.query.order_by(Goal.page_id))
+            print("page", page)
+            entries[friend].extend(Entry.query.filter_by(page_id=page.id).all())
+            goals[friend].extend(Goal.query.filter_by(page_id=page.id).all())
+    print(entries)
+    print(goals)
     return render_template('home.html', entries=entries, goals=goals)
 
 

@@ -3,10 +3,13 @@
     {% for author in entries %}
         <article class="media content-section">
           <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + author.image_file) }}">
+          <h1> {{ author.username }} </h1>
           <div class="media-body">
+            <h2> New Entries </h2>
             {% for entry in entries[author] %}
               {{ entry.text }}
             {%  endfor %}
+            <h2> New Goals </h2>
             {% for goal in goals[author] %}
               {{ goal.goals }}
             {%  endfor %}
