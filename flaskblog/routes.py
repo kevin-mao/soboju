@@ -7,7 +7,7 @@ from flaskblog.forms import RegistrationForm, LoginForm, UpdateAccountForm, Post
 from flaskblog.models import User, Community, Page, Entry, Goal
 from flask_login import login_user, current_user, logout_user, login_required
 from collections import defaultdict
-
+import json
 
 @app.route("/home", methods=['GET', 'POST'])
 @login_required
@@ -19,16 +19,10 @@ def home():
     # pages = Page.query.filter_by(user_id=current_user.id).all()
     entries = defaultdict(list)
     goals = defaultdict(list)
-
-    print("friends", current_user.friends)
     for friend in current_user.friends:
-        print("friend", friend)
         for page in friend.pages:
-            print("page", page)
             entries[friend].extend(Entry.query.filter_by(page_id=page.id).all())
             goals[friend].extend(Goal.query.filter_by(page_id=page.id).all())
-    print(entries)
-    print(goals)
     return render_template('home.html', entries=entries, goals=goals)
 
 
@@ -122,6 +116,172 @@ def account():
     return render_template('account.html', title='Account',
                            image_file=image_file, form=form)
 
+
+@app.route("/page", methods=['POST', 'PUT'])
+# @login_required
+def new_page():
+    if request.method == 'POST':
+        args = request.form
+        if not args:
+            abort(400)
+        if not current_user.is_authenticated:
+            abort(403)
+
+        title = args['title']
+        page = Page(user_id=current_user.id, title=title)
+        db.session.add(page)
+        db.session.commit()
+
+        return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
+
+    elif request.method == 'PUT':
+        args = request.form
+        if not args:
+            abort(400)
+        if not current_user.is_authenticated:
+            abort(403)
+
+        page_id = args['page_id']
+        new_title = args['title']
+        page = Page.query.filter_by(id=page_id).first()
+        page.title = new_title
+        db.session.commit()
+
+        return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
+
+@app.route("/entry", methods=['POST', 'PUT'])
+@login_required
+def new_entry():
+    if request.method == 'POST':
+        args = request.form
+        if not args:
+            abort(400)
+        if not current_user.is_authenticated:
+            abort(403)
+
+        page_id = args['page_id']
+        text = args['text']
+
+        entry = Entry(page_id=page_id, text=text)
+        db.session.add(entry)
+        db.session.commit()
+
+        return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
+
+    elif request.method == 'PUT':
+        args = request.form
+        if not args:
+            abort(400)
+        if not current_user.is_authenticated:
+            abort(403)
+
+        entry_id = args['entry_id']
+        new_text = args['text']
+
+        entry = Entry.query.filter_by(id=entry_id).first()
+        entry.text = new_text
+        db.session.commit()
+
+        return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
+
+@app.route("/goal", methods=['POST', 'PUT'])
+@login_required
+def new_goal():
+    if request.method == 'POST':
+        args = request.form
+        if not args:
+            abort(400)
+        if not current_user.is_authenticated:
+            abort(403)
+
+        page_id = args['page_id']
+        goals = args['goals']
+        goal = Goal(page_id=page_id, text=goals)
+        db.session.add(goal)
+        db.session.commit()
+
+        return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
+    
+    elif request.method == 'PUT':
+        args = request.form
+        if not args:
+            abort(400)
+        if not current_user.is_authenticated:
+            abort(403)
+
+        goal_id = args['goal_id']
+        new_goals = args['goals']
+
+        goal = Goal.query.filter_by(id=goal_id).first()
+        goal.goals = new_goals
+        db.session.commit()
+
+        return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
+
+@app.route("/comment", methods=['POST', 'PUT'])
+@login_required
+def new_comment():
+    if request.method == 'POST':
+        args = request.form
+        if not args:
+            abort(400)
+        if not current_user.is_authenticated:
+            abort(403)
+
+        entry_id = args.get('entry_id')
+        goal_id = args.get('goal_id')
+        text = args.get('text')
+        user_id = args.get('user_id')
+
+        if entry_id:
+            comment = Comment(text=text, user_id=user_id, username = current_user.username,
+                                    entry_id=entry_id)
+        elif goal_id:
+            comment = Comment(text=text, user_id=user_id, username = current_user.username,
+                                    goal_id=goal_id)
+            
+        db.session.add(comment)
+        db.session.commit()
+
+        return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
+    
+    elif request.method == 'PUT':
+        args = request.form
+        if not args:
+            abort(400)
+        if not current_user.is_authenticated:
+            abort(403)
+        
+        # if the current user is that the original poster
+        user_id = args['user_id']
+        if user_id != current_user.id:
+            abort(403)
+        comment_id = args['comment_id']
+        new_text = args['text']
+        
+        comment = Comment.query.filter_by(id=comment_id).first()
+        comment.text = new_text
+        db.session.commit()
+
+        return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
+
+@app.route("/friend", methods=['POST'])
+@login_required
+def new_friend():
+    args = request.form
+    if not args:
+        abort(400)
+    if not current_user.is_authenticated:
+        abort(403)
+
+    user_id = args['user_id']
+    new_friend = User.query.filter_by(id=user_id).first()
+    current_user.friends.append(new_friend)
+    new_friend.friends.append(current_user)
+
+    db.session.commit()
+
+    return json.dumps({'success':True}), 200, {'ContentType':'application/json'}  
 
 # @app.route("/post/new", methods=['GET', 'POST'])
 # @login_required

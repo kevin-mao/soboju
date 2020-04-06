@@ -24,12 +24,13 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(120), unique=True, nullable=False)
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
-
     pages = db.relationship("Page", backref="user")
     friends = db.relationship("User", secondary=friendship,
                            primaryjoin=id==friendship.c.friend_a_id,
                            secondaryjoin=id==friendship.c.friend_b_id)
     community = db.relationship("Community", secondary=membership, backref="members")
+    comments = db.relationship("Comment", backref="author") # received
+
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.image_file}')"
@@ -57,6 +58,7 @@ class Entry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     page_id = db.Column(db.Integer, db.ForeignKey('page.id'), nullable=False)
     text = db.Column(db.String(500), nullable=False)
+    comments = db.relationship("Comment", backref="entry")
     
     def __repr__(self):
         return f"Entry('{self.text}')"
@@ -64,7 +66,21 @@ class Entry(db.Model):
 class Goal(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     page_id = db.Column(db.Integer, db.ForeignKey('page.id'), nullable=False)
-    goals = db.Column(db.String(500), nullable=False)
+    text = db.Column(db.String(500), nullable=False)
+    comments = db.relationship("Comment", backref="goal")
 
     def __repr__(self):
-        return f"Goal('{self.goals}')"
+        return f"Goal('{self.goals}, {self.completed}')"
+
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.String(500), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False) # the receiver of this comment
+    entry_id = db.Column(db.Integer, db.ForeignKey('entry.id'))
+    goal_id = db.Column(db.Integer, db.ForeignKey('goal.id')) 
+    username = db.Column(db.String(20), nullable=False)
+
+    def __repr__(sefl):
+        return f"Comment('{self.text}, {self.author}')"
+
+
