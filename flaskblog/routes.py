@@ -56,7 +56,7 @@ def spectate(user_id):
     users = [user for user in users if user.id != current_user.id and user not in current_user.friends]
 
     if user_id == current_user.id:
-        return redirect(url_for('home'))
+        return redirect(url_for('journal'))
     other_user = User.query.filter_by(id=user_id).first()
     pages = Page.query.filter_by(user_id=user_id).all()
     entries = {}

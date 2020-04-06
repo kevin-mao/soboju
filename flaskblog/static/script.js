@@ -1,3 +1,14 @@
+function showPage(page_id){
+    pages = $(".page");
+    for (i = 0; i < pages.length; i++){
+        if (pages[i].id != page_id) {
+            pages[i].style.display = 'none';
+        } else {
+            pages[i].style.display = '';
+        }
+    }
+}
+
 $(document).ready(() => {
     jQuery.each( [ "put", "delete" ], function( i, method ) {
         jQuery[ method ] = function( url, data, callback, type ) {
@@ -17,25 +28,21 @@ $(document).ready(() => {
         };
       });
 
-   
+
+    if (window.location.pathname.slice(0,8) == '/journal'){
+        pages = $(".page");
+        showPage(pages[0].id);
+    }
 });
 
-function showPage(page_id){
-    pages = $(".page");
-    for (i = 0; i < pages.length; i++){
-        if (pages[i].id != page_id) {
-            pages[i].style.display = 'none';
-        } else {
-            pages[i].style.display = '';
-        }
-    }
-}
+
 function addPage(){
     title = $(`#page`).val();
     $.post('/page', {title}, (response) => {
         console.log(response);
         response = JSON.parse(response);
         page_id = response.page_id;
+        window.location.reload();
     });
 }
 
@@ -46,6 +53,7 @@ function addEntry(page_id) {
         console.log(response);
         response = JSON.parse(response);
         entry_id = response.entry_id;
+        window.location.reload();
     });
 }
 
@@ -71,6 +79,7 @@ function addGoal(page_id){
         console.log(response);
         response = JSON.parse(response);
         goal_id = repsonse.goal_id;
+        window.location.reload();
     });
 }
 
