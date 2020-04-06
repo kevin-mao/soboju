@@ -242,16 +242,19 @@ def new_comment():
         return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
     
     elif request.method == 'PUT':
-        # currently anyone can update a comment
         args = request.form
         if not args:
             abort(400)
         if not current_user.is_authenticated:
             abort(403)
-
+        
+        # if the current user is that the original poster
+        user_id = args['user_id']
+        if user_id != current_user.id:
+            abort(403)
         comment_id = args['comment_id']
         new_text = args['text']
-
+        
         comment = Comment.query.filter_by(id=comment_id).first()
         comment.text = new_text
         db.session.commit()
