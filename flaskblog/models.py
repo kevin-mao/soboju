@@ -75,7 +75,7 @@ class Goal(db.Model):
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(500), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id')) # the author of this comment
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False) # the author of this comment
     entry_id = db.Column(db.Integer, db.ForeignKey('entry.id')) # the author of this comment
     goal_id = db.Column(db.Integer, db.ForeignKey('goal.id')) # the author of this comment
 
