@@ -1,30 +1,82 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h1 class="mb-3">{{ user.username }} journal</h1>
-    <!-- table of contents -->
-    <ul>
+<div class="row">
+    <div class="col-md-4">
+    <div class="content-section">
+      <!-- <div class="media"> -->
+        <div class="account-heading">{{ current_user.username }}</div>
+        <img class="rounded-circle account-img" src="{{ image_file }}">
+        <div class="edit-profile">Edit</div>
+        <!-- <div class="media-body"> -->
+          
+          <!-- <p class="text-secondary">{{ current_user.email }}</p> -->
+        <!-- </div> -->
+      <!-- </div> -->
+      <div class="pink-divider"></div>
+      <div class="sidebar-journal">Goals</div>
+      <div class="pink-divider"></div>
+      <div class="sidebar-journal">Year at a Glance</div>
+      <div class="pink-divider"></div>
+      <div class="sidebar-journal">April</div>
+      <div class="pink-divider"></div>
+      <div class="sidebar-journal">May</div>
+      <div class="pink-divider"></div>
+     
+    </div>
+    </div>
+    <div class="col-md-8">
+        <!-- <h1 class="mb-3">{{ user.username }} journal</h1> -->
+        <div class="date-style">Monday, April 3 2020</div>
+        <br>
+        <!-- table of contents -->
+        <!-- <ul>
+            {% for page in pages %}
+            <li> {{ page.title }} </li>
+            {% endfor %}
+        </ul> -->
+        <!-- pages of entries and goals -->
         {% for page in pages %}
-        <li> {{ page.title }} </li>
-        {% endfor %}
-    </ul>
-    <!-- pages of entries and goals -->
-    {% for page in pages %}
-        <article class="media content-section">
-          <div class="media-body">
-            <h2>{{ page.title }} </h2>
-            <h3> Entries </3>
-            <ul>
-                {% for entry in entries.get(page.id) %}
-                <li> {{ entry.text }} </li>
-                {% endfor %}
-            </ul>
-            <h3>Goals</h3>
-            <ul>
-                {% for goal in goals.get(page.id) %}
-                <li> {{ goal.goals }} </li>
-                {% endfor %}
-            </ul>
-          </div>
-        </article>
+        <div class="row">
+            <div class="header-style">{{ page.title }} </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="entry-section">
+                  <!-- <div class="media-body"> -->
+                    
+                    <!-- <div class="header-style"> Ideas </div> -->
+                    <!-- <ul> -->
+                    {% for entry in entries.get(page.id) %}
+                    <div class="entry-style"> {{ entry.text }} </div>
+                    {% endfor %}
+                    <!-- </ul> -->
+                  <!-- </div> -->
+                </div>
+            </div>
+            <!-- <span class="dot"></span> -->
+
+            <div class="col-md-6">
+                <!-- <article class="media content-section"> -->
+                    <div class="entry-style">
+                    <div class="goal-style"> Goals </div>
+                    
+                    {% for goal in goals.get(page.id) %}
+                    <div class="row individual-goal">
+                        <div class="col-md-2">
+                            <div class="dot"></div>
+                        </div>
+                        <div class="col-md-10">
+                            <div> {{ goal.goals }} </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    </div>
+                    
+                <!-- </article> -->
+            </div>
+        
+        </div>
+    </div>
+</div>
     {% endfor %}
 {% endblock content %}

@@ -1,5 +1,5 @@
 body {
-  background: #fafafa;
+  background-color: #FEF9F0;
   color: #333333;
   margin-top: 5rem;
 }
@@ -9,15 +9,25 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .bg-steel {
-  background-color: #5f788a;
+  background-color: #ffffff;
 }
 
+.title-style {
+  color: black;
+  font-size: 20px;
+  font-family: "Permanent Marker";
+}
+
+.navbar-brand {
+  color: black;
+}
 .site-header .navbar-nav .nav-link {
-  color: #cbd5db;
+  color: black;
+  font-family: "Permanent Marker";
 }
 
 .site-header .navbar-nav .nav-link:hover {
-  color: #ffffff;
+  color: #FFE8E8;
 }
 
 .site-header .navbar-nav .nav-link.active {
@@ -27,9 +37,24 @@ h1, h2, h3, h4, h5, h6 {
 .content-section {
   background: #ffffff;
   padding: 10px 20px;
-  border: 1px solid #dddddd;
-  border-radius: 3px;
-  margin-bottom: 20px;
+  /*border: 1px solid #dddddd;*/
+  /*border-radius: 3px;*/
+  /*margin-bottom: 20px;*/
+}
+.sidebar-section {
+  background: #ffffff;
+  padding: 10px 20px;
+  /*border: 1px solid #dddddd;*/
+  /*border-radius: 3px;*/
+  /*margin-bottom: 20px;*/
+  font-family: "Permanent Marker";
+  padding-bottom: 50px;
+}
+
+.sidebar-journal {
+  background: #ffffff;
+  padding: 10px 20px;
+  font-family: "Permanent Marker";
 }
 
 .article-title {
@@ -71,10 +96,100 @@ a.article-title:hover {
 .account-img {
   height: 125px;
   width: 125px;
-  margin-right: 20px;
+  /*margin-right: 20px;*/
   margin-bottom: 16px;
+  margin-right: 80px;
+  margin-left: 80px;
 }
 
 .account-heading {
-  font-size: 2.5rem;
+  font-size: 20px;
+  text-align: center;
+}
+
+.journal-background {
+  background-color: #FEF9F0;
+}
+.pink-divider {
+  background-color: #FFE8E8;
+  height: 5px;
+  width: 100%;
+}
+.edit-profile {
+  width: 64px;
+  height: 29px;
+  margin-left: auto;
+  margin-right: auto;
+
+  background: #FFFFFF;
+  border: 2px solid #FFE8E8;
+  box-sizing: border-box;
+  border-radius: 50px;
+  text-align: center;
+  margin-bottom: 20px;
+
+  /*font-family: Open Sans;*/
+  /*font-size: 12px;
+  line-height: 16px;*/
+}
+
+.date-style {
+  font-family: "Permanent Marker";
+  font-size: 22px;
+  line-height: 32px;
+
+}
+
+.header-style {
+  font-family: "Permanent Marker";
+  font-size: 18px;
+  line-height: 26px;
+  margin-left: 30px;
+}
+
+.dot {
+  height: 25px;
+  width: 25px;
+  background-color: #FFE8E8;
+  border-radius: 50%;
+  display: inline-block;
+  /*margin-top: 10px;*/
+
+}
+
+.entry-style {
+  margin-top: 20px;
+  background: #ffffff;
+  padding: 15px 20px;
+
+  box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.goal-style {
+  font-family: "Permanent Marker";
+  font-size: 18px;
+  line-height: 26px;
+  /*margin-left: 30px;*/
+}
+
+.individual-goal {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.container-feed {
+  padding-left: 70px;
+  padding-right: 70px;
+}
+
+.feed-style {
+  font-family: Permanent Marker;
+  font-size: 16px;
+  line-height: 16px;
+}
+
+.feed-img {
+    height: 30px;
+    width: 30px;
 }

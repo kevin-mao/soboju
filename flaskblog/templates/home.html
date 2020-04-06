@@ -1,21 +1,35 @@
 {% extends "layout.html" %}
 {% block content %}
+<div class="container-feed">
     {% for author in entries %}
-        <article class="media content-section">
-          <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + author.image_file) }}">
-          <h1> {{ author.username }} </h1>
-          <div class="media-body">
-            <h2> New Entries </h2>
+        <img class="rounded-circle feed-img" src="{{ url_for('static', filename='profile_pics/' + author.image_file) }}">
+          <span class="feed-style"> {{ author.username }} </span>
+        <div class="entry-style">
+
+          <!-- <div class="media-body"> -->
+            <!-- <h2> New Entries </h2> -->
             {% for entry in entries[author] %}
-              {{ entry.text }}
+              <div class="individual-goal">{{ entry.text }} </div>
             {%  endfor %}
-            <h2> New Goals </h2>
+
+            <!-- <h2> New Goals </h2> -->
             {% for goal in goals[author] %}
-              {{ goal.goals }}
+              <div class="row individual-goal">
+                <div class="col-md-1">
+                    <div class="dot"></div>
+                </div>
+                <div class="col-md-11">
+                    <div> {{ goal.goals }} </div>
+                </div>
+            </div>
             {%  endfor %}
-          </div>
-        </article>
+
+
+          <!-- </div> -->
+        </div>
     {% endfor %}
+
+
 {#    {% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}#}
 {#      {% if page_num %}#}
 {#        {% if posts.page == page_num %}#}
@@ -27,4 +41,5 @@
 {#        ...#}
 {#      {% endif %}#}
 {#    {% endfor %}#}
+</div>
 {% endblock content %}
