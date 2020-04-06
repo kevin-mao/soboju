@@ -39,7 +39,8 @@ def journal():
 
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
 
-    return render_template('profile.html', pages=pages, entries=entries, goals=goals, image_file=image_file, user=current_user)
+    return render_template('profile.html', pages=pages, entries=entries, goals=goals,
+                                                image_file=image_file)
 
 @app.route("/about")
 def about():
@@ -132,7 +133,7 @@ def new_page():
         db.session.add(page)
         db.session.commit()
 
-        return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
+        return json.dumps({'success':True,  'page_id': page.id}), 200, {'ContentType':'application/json'}
 
     elif request.method == 'PUT':
         args = request.form
@@ -166,7 +167,7 @@ def new_entry():
         db.session.add(entry)
         db.session.commit()
 
-        return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
+        return json.dumps({'success':True, 'entry_id': entry.id}), 200, {'ContentType':'application/json'}
 
     elif request.method == 'PUT':
         args = request.form
@@ -195,12 +196,12 @@ def new_goal():
             abort(403)
 
         page_id = args['page_id']
-        goals = args['goals']
-        goal = Goal(page_id=page_id, text=goals)
+        text = args['text']
+        goal = Goal(page_id=page_id, text=text)
         db.session.add(goal)
         db.session.commit()
 
-        return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
+        return json.dumps({'success':True, 'goal_id': goal.id}), 200, {'ContentType':'application/json'}
     
     elif request.method == 'PUT':
         args = request.form
@@ -243,7 +244,7 @@ def new_comment():
         db.session.add(comment)
         db.session.commit()
 
-        return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
+        return json.dumps({'success':True, 'comment_id': comment.id}), 200, {'ContentType':'application/json'}
     
     elif request.method == 'PUT':
         args = request.form
