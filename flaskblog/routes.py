@@ -15,8 +15,11 @@ def home():
     # main feed: get recent entries and goals 
     # change home.html to use entires and goals
     # return render_template('home.html', entries=entries, goals=goals)
+    
+    # pages = Page.query.filter_by(user_id=current_user.id).all()
     entries = defaultdict(list)
     goals = defaultdict(list)
+
     print("friends", current_user.friends)
     for friend in current_user.friends:
         print("friend", friend)
@@ -40,7 +43,9 @@ def journal():
         entries[page.id] = Entry.query.filter_by(page_id=page.id).all()
         goals[page.id] = Goal.query.filter_by(page_id=page.id).all()
 
-    return render_template('profile.html', pages=pages, entries=entries, goals=goals, user=current_user)
+    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+
+    return render_template('profile.html', pages=pages, entries=entries, goals=goals, image_file=image_file, user=current_user)
 
 @app.route("/about")
 def about():
