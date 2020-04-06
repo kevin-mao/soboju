@@ -2,29 +2,29 @@
 {% block content %}
 <div class="row">
     <div class="col-md-4">
-    <div class="content-section">
-      <!-- <div class="media"> -->
-        <div class="account-heading">{{ current_user.username }}</div>
-        <img class="rounded-circle account-img" src="{{ image_file }}">
-        <div class="edit-profile">Edit</div>
-        <!-- <div class="media-body"> -->
-          
-          <!-- <p class="text-secondary">{{ current_user.email }}</p> -->
-        <!-- </div> -->
-      <!-- </div> -->
-              
-        <!-- table of contents -->
-      <div class="pink-divider"></div>
-      {% for page in pages %}
-      <div class="sidebar-journal">{{page.title}}</div>
-      <div class="pink-divider"></div>
-      {% endfor %}
-      <form>
-        <input type="text" id="page">
-        <input type="submit" value="Add an page" onclick="addPage()">
-    </form>
-     
-    </div>
+        <div class="content-section">
+            <!-- <div class="media"> -->
+            <div class="account-heading">{{ current_user.username }}</div>
+            <img class="rounded-circle account-img" src="{{ image_file }}">
+            <div class="edit-profile">Edit</div>
+            <!-- <div class="media-body"> -->
+
+            <!-- <p class="text-secondary">{{ current_user.email }}</p> -->
+            <!-- </div> -->
+            <!-- </div> -->
+
+            <!-- table of contents -->
+            <div class="pink-divider"></div>
+            {% for page in pages %}
+            <div class="sidebar-journal">{{page.title}}</div>
+            <div class="pink-divider"></div>
+            {% endfor %}
+            <form>
+                <input type="text" id="page">
+                <input type="submit" value="Add an page" onclick="addPage()">
+            </form>
+
+        </div>
     </div>
     <div class="col-md-8">
         <!-- <h1 class="mb-3">{{ current_user.username }} journal</h1> -->
@@ -39,8 +39,8 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="entry-section">
-                  <!-- <div class="media-body"> -->
-                    
+                    <!-- <div class="media-body"> -->
+
                     <!-- <div class="header-style"> Ideas </div> -->
                     <!-- <ul> -->
                     {% for entry in entries.get(page.id) %}
@@ -51,16 +51,16 @@
                         <input type="submit" value="Add an entry" onclick="addEntry({{page.id}})">
                     </form>
                     <!-- </ul> -->
-                  <!-- </div> -->
+                    <!-- </div> -->
                 </div>
             </div>
             <!-- <span class="dot"></span> -->
 
             <div class="col-md-6">
                 <!-- <article class="media content-section"> -->
-                    <div class="entry-style">
+                <div class="entry-style">
                     <div class="goal-style"> Goals </div>
-                    
+
                     {% for goal in goals.get(page.id) %}
                     <div class="row individual-goal">
                         <div class="col-md-2">
@@ -75,13 +75,12 @@
                         <input type="text" id="{{page.id}}-goal">
                         <input type="submit" value="Add a goal" onclick="addGoal({{page.id}})">
                     </form>
-                    </div>
-                    
+                </div>
+
                 <!-- </article> -->
             </div>
-        
         </div>
+    {% endfor %}
     </div>
 </div>
-    {% endfor %}
 {% endblock content %}
